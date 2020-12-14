@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>四方/数据可视化</title>
+		<meta charset="UTF-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    	<script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+    	<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+    	<script src="js/echarts.min.js"></script>
+    	<script src="https://cdn.bootcss.com/xlsx/0.11.5/xlsx.core.min.js"></script>
+    	<script src="js/myjavascript.js"></script>
+		<script>window.onload=pageLoad</script>			
+	</head>
+	
+<!--
+	需求：	1.点击“选择文件”按钮，将excel文件转为对象和可选择数组；
+			2.选择日期下拉菜单，选择一个月中的1天，将该天存为数字；hourNum   (时间间隔1分，1小时=60个点，1天=1440个点，1个月=43200个点)
+			3.点击“加载图形”按钮，选择对应 该天数字对应的数组片段  赋值给图形中的series.data数组。
+		
+		时间对应关系：hourNum  起始值start=1440*（hourNum-1）:
+			1     0:1439   1440*（hourNum-1）:1440*hourNum-1
+			2  1440:2879
+			3  2880:4320			
+-->	
+	
+	<body style="background-color:#003166;">
+		<div id="container">
+<!--1.标题栏 -->
+			<div style="height: 50px; background-color: #00254d;">
+				<div class="col-lg-1" style=" padding-left: 0px;"><!--与外层div的边距 -->
+				<img src="img/logo.gif" width="120px" height="50px">					
+				</div>				
+				<div class="col-lg-11" >
+				<h5 style="color: white; padding-left: 5px;margin-top: 25px;"><strong>数据可视化</strong></h5>					
+				</div>				
+			</div>	
+			
+			<hr style="margin-top: 2px;margin-bottom: 2px;"/>			
+
+			<div class="row" style="height: 640px;">
+<!--2.菜单栏 -->
+				<div class="col-lg-2" style="background-color: #00254d; height:645px;" >
+					<br>
+					<!--选择文件按钮-->
+					<input type="file" id="excel-file" style="display: none;">
+					<button id="clickFile" class="btn btn-default active" style="margin-left: 6px;margin-bottom: 10px;">选择文件</button>
+					<!--选择日期按钮-->
+					<form action="new_file3.html">
+					  	<input  id="dateNum"  type="date" style="margin-left: 6px; " >  <!--month :月份 -->
+					  	<!--<button id="clickDate" class="btn btn-default active" style="margin-left: 6px;">日期选择</button>-->
+					  	<input type="button"  class="btn btn-default active" id="postHour" value="提交日期" style="margin-left: 6px;margin-top: 10px;margin-bottom: 10px;">
+					</form>
+					<!--图形加载按钮-->
+					<button id="datatoChart"  class="btn btn-default active" style="margin-left: 6px;" >加载图形</button>					
+				</div>				
+<!--3.内容栏 -->
+				<div class="col-lg-10"  >
+					<!--图形展示区-->
+					<div id="main" style="width: 1000px;height:510px;"></div>		
+					
+
+				</div>
+			</div>	
+			
+
+
+
+			</div>
+
+			
+			
+			
+			
+		</div>
+		
+		
+		
+		
+	</body>
+</html>

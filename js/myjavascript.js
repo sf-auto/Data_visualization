@@ -14,7 +14,7 @@ function pageLoad(){
     var arrPowerShow=new Array();//传给图像的有功数组
     var arrRepowerShow=new Array();//传给图像的有功数组
     var arrDifferShow=new Array();//做差
-    
+    var hourSelect=new String(); //图片保存名称即时间
     //  0:00  0:01  0:02 ···  0:59
 	//  1:00  1:01       ···  1:59
 	var arrxAxis=new Array();//X轴坐标
@@ -74,7 +74,7 @@ function pageLoad(){
             console.log(persons);
             var strKey   =  Object.keys(persons[0]); //标签
             var strKey2  =  strKey[0];   //第2列标签
-            var strKey32 =  strKey[31];  //第32列标签
+            var strKey31 =  strKey[30];  //第32列标签
             
             
             console.log('标签：');
@@ -82,7 +82,7 @@ function pageLoad(){
             console.log('第2列标签名称：');
             console.log(strKey2);
             console.log('第32列标签名称：');
-            console.log(strKey32);
+            console.log(strKey31);
             console.log('第2列标签对应数据:');
             console.log(persons[0][strKey2]);
 //          console.log("persons类型："+ typeof persons ); //object
@@ -99,7 +99,7 @@ function pageLoad(){
             for (var i=0;i<persons.length;i++) {
 
             	arrPower[i]=parseFloat(persons[i][strKey2]);
-            	arrRepower[i]=parseFloat(persons[i][strKey32]);
+            	arrRepower[i]=parseFloat(persons[i][strKey31]);
             	
             };
 //          console.log("有功数组arrPower："+arrPower);
@@ -120,8 +120,8 @@ function pageLoad(){
 // 2.提交日期按钮，取所选小时字符串转为数字  对应功率数据片段
 	document.getElementById('postHour').onclick=function(){
 		var hourElt=document.getElementById('dateNum');
-		var hourSelect=hourElt.value;
-//		console.log("所选时间hour：" + hourSelect);
+	    hourSelect=hourElt.value;
+		console.log("所选时间hour：" + hourSelect);
 //		console.log("所选时间的类型：" +typeof hourSelect);
 		var hourNum=parseFloat(hourSelect.slice(-2));
 //		console.log("hour后两位转数字：" + hourNum);
@@ -164,7 +164,7 @@ function pageLoad(){
 	        	},
 	            text: '储能系统效果展示'
 	        },
-	        color: ['#53ff1a','#00ffff','#ffcc00'],
+	        color: ['#53ff1a','#00ffff','#ff6666'],
 	//提示框组件        
 	        tooltip: { 
 	        	trigger:'axis',//触发方式
@@ -188,11 +188,10 @@ function pageLoad(){
 	//工具箱
 	        toolbox: {
 	            feature: {
-	                magicType: {
-	                    type: ['line','bar']
-	                },
 	                saveAsImage: {
-	                    pixelRatio:2
+	                    pixelRatio:2,
+	                    name:hourSelect,
+	                    backgroundColor:'#003166'
 	                }
 	            }
 	        },
@@ -266,7 +265,7 @@ function pageLoad(){
 	            type: 'line',
 	            data:arrDifferShow,
 	            lineStyle:{
-	            	width:0.9,
+	            	width:1.5,
 	            	type:'dotted'
 	            }
 	        }

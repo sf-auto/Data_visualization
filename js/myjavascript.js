@@ -13,11 +13,27 @@ function pageLoad(){
     var arrRepower=new Array();//无功数组
     var arrPowerShow=new Array();//传给图像的有功数组
     var arrRepowerShow=new Array();//传给图像的有功数组
+    var arrDifferShow=new Array();//做差
     
-    var arrxAxis= new Array(1440);
-		for(var i=0;i<arrxAxis.length;i++){
-		  arrxAxis[i] = i;
-		}
+    //  0:00  0:01  0:02 ···  0:59
+	//  1:00  1:01       ···  1:59
+	var arrxAxis=new Array();//X轴坐标
+	var hourStr=new Array();
+	var minStr=new Array();
+		for(var j=0;j<24;j++){	
+			hourStr[j]=new Array();
+			for (var i=0;i<60;i++) {
+				if(i<10){
+					minStr[i]='0'+i;  //
+				}
+				else{
+					minStr[i]=i.toString();
+				}	
+				hourStr[j][i]=j.toString()+':'+minStr[i];
+			};		
+		};	
+	arrxAxis = [].concat.apply([], hourStr);
+	
 //  选择文件按钮改变
     document.getElementById('clickFile').onclick=function(){
     	document.getElementById('excel-file').click();
@@ -48,35 +64,50 @@ function pageLoad(){
             for (var sheet in workbook.Sheets) {
                 if (workbook.Sheets.hasOwnProperty(sheet)) {
                     fromTo = workbook.Sheets[sheet]['!ref'];
-                    console.log(fromTo);
+                    console.log('fromTo:' + fromTo);
                     persons = persons.concat(XLSX.utils.sheet_to_json(workbook.Sheets[sheet]));
                     break; // 如果只取第一张表，就取消注释这行
                 }
             }
             //在控制台打印出来表格中的数据
+            console.log('表格数据persons:');
             console.log(persons);
-            console.log("persons类型："+ typeof persons ); //object
-            console.log("第一行有功："+ persons[0].有功功率,"第一行无功："+persons[0].无功功率);
-            console.log("第一行有功："+ persons[1].有功功率,"第一行无功："+persons[1].无功功率);
-            console.log("有功类型："+ typeof persons[0].有功功率  +'<br>'); //string
-            var x=parseFloat(persons[0].有功功率);
+            var strKey   =  Object.keys(persons[0]); //标签
+            var strKey2  =  strKey[0];   //第2列标签
+            var strKey32 =  strKey[31];  //第32列标签
             
-            console.log("x："+ x);
-            console.log("有功类型转换后x："+ typeof x);//number
-            console.log('文件persons长度:'+ persons.length);
+            
+            console.log('标签：');
+            console.log(strKey);
+            console.log('第2列标签名称：');
+            console.log(strKey2);
+            console.log('第32列标签名称：');
+            console.log(strKey32);
+            console.log('第2列标签对应数据:');
+            console.log(persons[0][strKey2]);
+//          console.log("persons类型："+ typeof persons ); //object
+//          console.log("第一行有功："+ persons[0].有功功率,"第一行无功："+persons[0].无功功率);
+//          console.log("第一行有功："+ persons[1].有功功率,"第一行无功："+persons[1].无功功率);
+//          console.log("有功类型："+ typeof persons[0].有功功率  +'<br>'); //string
+//          var x=parseFloat(persons[0].有功功率);
+            
+//          console.log("x："+ x);
+//          console.log("有功类型转换后x："+ typeof x);//number
+//          console.log('文件persons长度:'+ persons.length);
                        
 //          创建有功数组和无功数组
             for (var i=0;i<persons.length;i++) {
-            	arrPower[i]=parseFloat(persons[i].有功功率);
-            	arrRepower[i]=parseFloat(persons[i].无功功率)
+
+            	arrPower[i]=parseFloat(persons[i][strKey2]);
+            	arrRepower[i]=parseFloat(persons[i][strKey32]);
             	
             };
-            console.log("有功数组arrPower："+arrPower);
-            console.log("有功数组arrPower类型："+typeof arrPower);
-            console.log("有功第1个值："+arrPower[0]);
-            console.log("有功第1个值类型："+typeof arrPower[0]);
-            console.log("有功第4个值："+arrPower[3]);
-    		console.log("有功第4个值类型："+typeof arrPower[3]);
+//          console.log("有功数组arrPower："+arrPower);
+//          console.log("有功数组arrPower类型："+typeof arrPower);
+//          console.log("有功第1个值："+arrPower[0]);
+//          console.log("有功第1个值类型："+typeof arrPower[0]);
+//          console.log("有功第4个值："+arrPower[3]);
+//  		console.log("有功第4个值类型："+typeof arrPower[3]);
     		   		
         };
        
@@ -90,24 +121,28 @@ function pageLoad(){
 	document.getElementById('postHour').onclick=function(){
 		var hourElt=document.getElementById('dateNum');
 		var hourSelect=hourElt.value;
-		console.log("所选时间hour：" + hourSelect);
-		console.log("所选时间的类型：" +typeof hourSelect);
+//		console.log("所选时间hour：" + hourSelect);
+//		console.log("所选时间的类型：" +typeof hourSelect);
 		var hourNum=parseFloat(hourSelect.slice(-2));
-		console.log("hour后两位转数字：" + hourNum);
-		console.log("后两位转数字类型确认：" +typeof hourNum);
+//		console.log("hour后两位转数字：" + hourNum);
+//		console.log("后两位转数字类型确认：" +typeof hourNum);
 		
 	//2.1.截取相对片段的功率值 1440*（hourNum-1）:1440*hourNum-1  例中将1440看作10
-		console.log('有功数组和无功数组：');
-		console.log(arrPower);
-		console.log(arrRepower);
-		console.log("有功数组长度：" + arrPower.length);
+//		console.log('有功数组和无功数组：');
+//		console.log(arrPower);
+//		console.log(arrRepower);
+//		console.log("有功数组长度：" + arrPower.length);
 		
 		arrPowerShow= arrPower.slice(1440*(hourNum-1),1440*hourNum);
 		arrRepowerShow= arrRepower.slice(1440*(hourNum-1),1440*hourNum);
-		console.log('arrPowerShow:');
-		console.log(arrPowerShow);
-		console.log('arrRepowerShow:');
-		console.log(arrRepowerShow);
+		for (var i=0;i<1440;i++) {
+			arrDifferShow[i]=(arrRepowerShow[i]-arrPowerShow[i]).toFixed(1);
+		}
+		
+//		console.log('arrPowerShow:');
+//		console.log(arrPowerShow);
+//		console.log('arrRepowerShow:');
+//		console.log(arrRepowerShow);
 		
 	};	
 
@@ -122,38 +157,66 @@ function pageLoad(){
 		var myChart = echarts.init(document.getElementById('main'));
 
 	    var option = {
-	        title: { //标题
+	//标题
+	        title: {
 	        	textStyle:{
 	        		color:"#ffffff"
 	        	},
-	            text: '功率变化曲线'
+	            text: '储能系统效果展示'
 	        },
-	        color: ['#993366','#ffcc66'],
-	        tooltip: { //触发方式
-	        	trigger:'axis'
+	        color: ['#53ff1a','#00ffff','#ffcc00'],
+	//提示框组件        
+	        tooltip: { 
+	        	trigger:'axis',//触发方式
+	        	axisPointer: {
+	                type: 'cross'
+	            }
 	        },
-	        legend: { //图例  series里面有name值该处可省略
+	//坐标轴指示器        
+	        axisPointer: {
+	            label: {
+	                backgroundColor: '#777'
+	            }
+	        },    
+	//图例        
+	        legend: { //  series里面有name值该处可省略
 	            //data:['有功曲线']
 	            textStyle:{
 	        		color:"#ffffff"
 	        	}
 	        },
+	//工具箱
+	        toolbox: {
+	            feature: {
+	                magicType: {
+	                    type: ['line','bar']
+	                },
+	                saveAsImage: {
+	                    pixelRatio:2
+	                }
+	            }
+	        },
+	//图表边距        
 	        grid:{
 	        	left:'3%',
 	        	right:'3%',
 	        	bottom:'7%'
 	        },
+	//X轴        
 	        xAxis: {
-	        	axisLine:{//轴线
+	        	axisLine:{
 	        		lineStyle:{
 	        			color:"#ffffff"
 	        		}
 	        	},
 	        	axisLabel:{ //刻度
-	        		color:"#ffffff"
+	        		color:"#ffffff",
+	        		interval:59,
+	        		showMaxLabel: true
 	        	},
 				data:arrxAxis
 	        },
+	//Y轴        
 	        yAxis: {
 	        	axisLine:{
 	        		lineStyle:{
@@ -168,10 +231,22 @@ function pageLoad(){
 	        			color:"#47476b"
 	        		}
 	        	}
+	        	
 	        },
+	//滑块和放大缩小        
+	        dataZoom: [
+	            {   // 这个dataZoom组件，默认控制x轴。鼠标滚动变化
+	                type: 'inside', // 这个 dataZoom 组件是 slider 型 dataZoom 组件
+	                start: 0,      // 左边在 10% 的位置。
+	                end: 100         // 右边在 60% 的位置。
+	            },
+	        ],
+	        
+	        
+	//数据        
 	        series: [
 	        {
-	            name: '有功曲线',
+	            name: '储能系统吸收有功功率曲线',
 	            type: 'line',
 	            data:arrPowerShow,
 	            lineStyle:{
@@ -179,11 +254,20 @@ function pageLoad(){
 	            }
 	        },
 	        {
-	        	name: '无功曲线',
+	        	name: '交流线路治理后有功功率曲线',
 	            type: 'line',
 	            data:arrRepowerShow,
 	            lineStyle:{
 	            	width:0.9
+	            }
+	        },
+	        {
+	        	name: '交流线路原始有功功率曲线',
+	            type: 'line',
+	            data:arrDifferShow,
+	            lineStyle:{
+	            	width:0.9,
+	            	type:'dotted'
 	            }
 	        }
 	        ]

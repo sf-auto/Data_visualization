@@ -99,7 +99,7 @@ function pageLoad(){
             for (var i=0;i<persons.length;i++) {
 
             	arrPower[i]=parseFloat(persons[i][strKey2]);
-            	arrRepower[i]=parseFloat(persons[i][strKey31]);
+            	arrRepower[i]=2*parseFloat(persons[i][strKey31]);
             	
             };
 //          console.log("有功数组arrPower："+arrPower);
